@@ -16,7 +16,6 @@ object_table = dict()
 for bucket in buckets:
     # Get bucket name
     bucket_name=bucket['Name']
-    #print(bucket_name)
 
     # Get a list of all objects in the S3 bucket
     try:
@@ -28,7 +27,6 @@ for bucket in buckets:
     # Check if bucket is empty (i.e. no contents)
     if 'Contents' not in objects:
         print(f'"{bucket_name}" is empty')
-        s3.delete_bucket(Bucket=bucket_name)
         continue
 
     # Iterate through each object in the bucket and store its hash and (bucket, key) tuple in the dictionary
@@ -47,15 +45,7 @@ dupe_table=dict()
 for hash_value, tuples in object_table.items():
     if len(tuples) == 1:
         continue
-
     dupe_table[hash_value]=tuples
-
-    print(f'Deleting objects with hash value {hash_value}')
-
-    # Skip the first object in the list
-    for bucket_name, key in tuples[1:]:
-        print(f'Deleting key {key} from bucket {bucket_name}')
-        #s3.delete_object(Bucket=bucket_name, Key=key)
 
 # Write results to JSON
 with open('s3-duplicates.json', 'w') as file:
