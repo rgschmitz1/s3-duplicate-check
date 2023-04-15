@@ -1,2 +1,4 @@
+.obsidian
+__pycache__/
 s3-duplicates.json
 venv
